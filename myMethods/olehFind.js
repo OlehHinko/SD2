@@ -1,31 +1,29 @@
-"use strict"
+"use strict";
 
 //olehFind
-Array.prototype.olehFind = function () {
-    Object.defineProperty(Array.prototype, 'find', {
-      value: function(predicate) {
-        if (this == null) {
-          throw new TypeError('"this" is null or not defined');
-        }
-  
-        var o = Object(this);
-        var len = o.length >>> 0;
-  
-        if (typeof predicate !== 'function') {
-          throw new TypeError('предикат має бути функцією');
-        }
-  
-        var thisArg = arguments[1];
-  
-        var k = 0;
-        while (k < len) {
-          var kValue = o[k];
-          if (predicate.call(thisArg, kValue, k, o)) {
-            return kValue;
-          }
-          k++;
-        }
-        return undefined;
-      }
-    });
+Array.prototype.olehFind = function(fn) {
+  if (this == null) {
+    throw new TypeError('"this" is null or not defined');
   }
+  if (typeof fn !== "function") {
+    throw new TypeError("the predicate must be a function");
+  }
+  var i = 0;
+  while (i < this.length) {
+    var elem = this[i];
+    if (fn.call(this, elem, i, this)) {
+      return elem;
+    }
+    i++;
+  }
+  return undefined;
+};
+
+var mas = [
+  { id: 1, name: "Vasyl" },
+  { id: 2, name: "Oleh" },
+  { id: 3, name: "Nazariy" },
+  { id: 4, name: "Denis" }
+];
+
+var newMas = mas.olehFind(item => item.id === 3);
